@@ -55,7 +55,7 @@ $icon-font-path: "../../bower_components/bootstrap-sass/assets/fonts/bootstrap/"
 }
 
 .btn-bottom {
-  margin: 50px 0 20px;
+  margin: 10px;
 }
 
 .photo {
@@ -66,7 +66,7 @@ $icon-font-path: "../../bower_components/bootstrap-sass/assets/fonts/bootstrap/"
 }
 
 .filter {
-  margin: 30px 0 20px
+  margin: 20px 0;
 }
 
 .required, .error {
@@ -78,6 +78,48 @@ $icon-font-path: "../../bower_components/bootstrap-sass/assets/fonts/bootstrap/"
   box-shadow: 0 0 8px rgba(255, 0, 0, 0.5);
   transition: all 0.5s ease 0s;
 }
+
+#top {
+  position: fixed; width: 100%; z-index: 1000
+}
+
+.content {
+  padding-top: 72px;
+}
+
+.reg-container {
+  padding-top: 100px;
+}
+
+.reg-container .page-header {
+  margin-top: 0;
+}
+
+.view-animate.ng-enter,
+.view-animate.ng-leave,
+.animate-repeat.ng-move,
+.animate-repeat.ng-enter,
+.animate-repeat.ng-leave {
+  transition: all linear .5s;
+  -webkit-transition: all linear .5s;
+}
+
+.view-animate.ng-enter,
+.view-animate.ng-leave.ng-leave-active,
+.animate-repeat.ng-leave.ng-leave-active,
+.animate-repeat.ng-move,
+.animate-repeat.ng-enter{
+  opacity: 0;
+}
+
+.view-animate.ng-enter.ng-enter-active,
+.view-animate.ng-leave,
+.animate-repeat.ng-leave,
+.animate-repeat.ng-move.ng-move-active,
+.animate-repeat.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+
 
 /**
  *  Do not remove the comments below. It's the markers used by gulp-inject to inject

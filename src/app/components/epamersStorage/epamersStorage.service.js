@@ -31,7 +31,7 @@ function epamersStorage(localStorageService) {
     storage.list.push({
       "id": storage.list.length + 1,
       "firstName": guestName,
-      "status": "Yes"
+      "status": "0"
     });
     storage.saveList();
   };

@@ -2,5 +2,5 @@
   'use strict';
 
   angular
-    .module('grillParty', ['ui.router', 'ui.bootstrap', 'LocalStorageModule', 'epamersStorageModule', 'regModule'])
+    .module('grillParty', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'LocalStorageModule', 'epamersStorageModule'])
 })();

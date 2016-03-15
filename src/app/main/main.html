@@ -1,29 +1,4 @@
-<header id="top">
-  <nav class="navbar navbar-default">
-    <div class="container">
-      <div class="col-md-12">
-        <div class="navbar-header">
-          <img src="/assets/images/logo.png" class="logo">
-          <span class="navbar-brand">EPAM Grill Party</span>
-        </div>
-        <ul class="nav navbar-nav navbar-right">
-          <li class="active">
-            <a href="">
-              <i class="fa fa-home"></i> Home
-
-            </a>
-          </li>
-          <li>
-            <a href="" ng-click="register()">
-              <i class="glyphicon glyphicon-fire"></i> Register </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-</header>
-
-<div class="container">
+<div class="container content">
 
   <div class="jumbotron text-center col-md-12">
     <h1>Welcome to Grill Party!</h1>
@@ -40,7 +15,7 @@
       <button type="button" class="btn btn-lg btn-default" ng-click="vm.gotoElement('partyFaces')"><i
         class="fa fa-group"></i> Party Faces
       </button>
-      <button type="button" class="btn btn-lg btn-success" ng-click="register()"><i
+      <button type="button" class="btn btn-lg btn-success" ng-click="cc.register()"><i
         class="glyphicon glyphicon-fire"></i> Register Now
       </button>
     </p>
@@ -51,32 +26,56 @@
   </div>
 </div>
 
-<div class="container" id="partyFaces">
+<div class="container content" id="partyFaces">
   <div class="col-md-10 col-md-offset-1">
     <div class="row">
       <div class="col-lg-12 text-center">
         <h2 class="section-heading">EPAM Party Faces</h2>
 
-        <select class="form-control filter"
-                ng-model="vm.filterEpamers"
-                ng-options="option.name for option in vm.filterOptions track by option.id">
-        </select>
+        <div class="form-inline filter clearfix">
+          <div class="input-group pull-left col-md-3">
+            <span class="input-group-addon">Search</span>
+            <input type="text" placeholder="Enter the name..." class="form-control" ng-model="vm.searchText">
+          </div>
+
+          <div class="input-group center-block">
+            <span class="input-group-addon">Attendance</span>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-class="{'btn-success' : vm.buttonSelected('0')}"
+                        ng-click="vm.includeParamToFilter('0')"> Yes
+                </button>
+                <button type="button" class="btn btn-default" ng-class="{'btn-warning' : vm.buttonSelected('1')}"
+                        ng-click="vm.includeParamToFilter('1')"> Maybe
+                </button>
+                <button type="button" class="btn btn-default" ng-class="{'btn-danger' : vm.buttonSelected('2')}"
+                        ng-click="vm.includeParamToFilter('2')"> No
+                </button>
+                <button type="button" class="btn btn-default" ng-class="{'btn-info' : vm.buttonSelected('3')}"
+                        ng-click="vm.includeParamToFilter('3')"> Not registered yet
+                </button>
+              </span>
+          </div>
+
+          <div class="input-group pull-right col-md-3">
+            <span class="input-group-addon">Sort by:</span>
+            <select class="form-control"
+                    ng-model="vm.sortEpamers"
+                    ng-options="option.name for option in vm.sortOptions track by option.id">
+            </select>
+          </div>
+        </div>
       </div>
     </div>
     <div class="row">
-      <div ng-repeat="epamer in filteredEpamers =
-      (vm.filterEpamers.id == 'notReg') ? (vm.epamers | filter : {status:'!'}) : (
-      (vm.filterEpamers.id == 'allReg') ? (vm.epamers | filter : {status:'!!'}) :
-      (vm.epamers | filter : {status: vm.filterEpamers.id}))
-       track by epamer.id">
-        <div class="col-sm-4"
-             ng-if="(vm.filterEpamers.id!='notReg' && epamer.status != null) || (vm.filterEpamers.id==='notReg' && epamer.status == null)">
+      <div ng-repeat="epamer in filteredEpamers = (vm.epamers | filter : vm.statusFilter | orderBy: vm.sortEpamers.id)
+        track by epamer.id" class="animate-repeat">
+        <div class="col-sm-4">
           <div class="well">
             <p class="text-center">
               <img class="photo" ng-src="{{epamer.url}}"
                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADgCAMAAADCMfHtAAAAilBMVEUAAAD////8/PwEBATn5+f39/eKiorZ2dnDw8MpKSkhISEwMDD09PTq6urk5OTR0dEZGRlfX19xcXG0tLRZWVlsbGw8PDyrq6sUFBRERES6urqlpaV6enpnZ2eenp6/v7+SkpJOTk49PT00NDSNjY2Xl5dISEjV1dXKysodHR2CgoIsLCx4eHgWFhaqcnqmAAALEElEQVR4nO2dCXeiPBSGY3AvYN23utVare38/7/3ERCFEJCQ9yJ+x/ecmXM6YyUP2W5ubm5YjVb88if4wXbc3mkzHA4XdvTfScVKeUqt1nBPy3N/0n2fWUxod/L4eBmMpRA2WuvVG5O0GjplPLsMQnval+kYEzXZ+Rg69LVISMj9jmYvf5N8N/WHNl0JfFHWoQAc7rP4hPZDwiLUiOuw5g7u8Ql9uHSFICZszfMAMjbvEc4clK20/Z6Lz7LYrE1XCkLCjcWsfHXoaUpWiUSEXnlPFtMgZEuaghDWodthGoReQ50SFYSK0FbM8tmIFtGsQUX4pVODASI7XowErPCEfhnbMz0+n7DjUkwaNHXY2OnhXdSnsOBoCKfacMHAu32KVuoV0k4slfJqgy8OST9cFwVknTq8FilaqfNZmJB91NDeDQpC/V4YUQ9dGgJCe2RCuHuCVnoyAWRsWP1WmmvVm65vsIMKT+ib3GaVCBWecGkIyEZVb6VzXYs0Lm+RgR1O4YSuaRUy1oQWCEvIAY2UsTm0maLrsGE0GQayoKMpmrBlDshYC1kiNGFxozsiqG8RTMjHCMIFskhgQvfuNkUeQed8MGEPAVjpOjRaOF1V5X54hhBWeSxdmZlsF0F327CEBb2IkmZQpyKW0JkgCCcNZJmwhMZrQ199aJmwhK0fBOEZWiYw4QxBiN1KrCChdYKWqYKttIMNzcAS1gtvWES0gw6lYEL7G0A4gBYJb9OY64AtEpjwC0AIjq0BExp69IXeoXY3nNA2N0z3dWyR0H6aoWYIRlJV37fghvsyFSf0PbmZAbM5NKl0K220j8JTY9ROu5UeadzuzNhus47QIlXRpoF62uAjDcIh/IUtUgVtmmrbpQsA4ajKa4vaEUC4x06IYMI6YN8CbJii954Ay6dKezEwbn1suAmaELE1g41pRxMihpo1tERoQhfgT6x2HQKWwGCzDb4+NLfbZhWPidoaE/5iF4jo+bDWNiYcY4tUwbi2aq+evGW+qSvqDD5Wgo++FItgA8YpdmVBMJbWjibzxQRrkwoRxHk3loV9NegWKkRy7umoefjwond4CxUiOrum7xe2mLUhSQZCdMKyyGbwiuSAJdkZ0gIr4Q3NoXwqwqE24CdRqhMqwqP2lPhHVBIqQv0TelQJQKgIue6EYVGl/yAj1HVJ7ajy1JDlVNB1SYF9+TeREequE7dUBSEj1D1aAl4V3kRGaGv69+Hnf0PRZW/Rs2os8N72TXQZeMT5oPzTPjggMSI6Qr2O+EmW1Iwwi5JWM4UfUr+KkPD4T4MQfPg3IjJCrrfT1n8+Qk9NPUIiRkrCP71W+oSEOkeC5884ljZy5hT01X3C+bBW1zoi9GxWm5BeRDRVQjo6u5Rr5h5YUU0XhPOh5v7FiWgwpWulruYWFNUin3ZtkV9WsLp4Ip93zdY+TrqmyWFONtLoB0ftKXae6OqwrjPd3yqRQCSEvFjQyYzErqEg5Pq+xEB9+zkyQ3qldLuFCEmcpiSt1NkVDccgsN0oCOujgnwWxQ4UnJDX6kbhiYvLt8AEj2urtQ3zKqy5/zUwRnh86YGZhn2txHY3rhLB+dp6fVNA75fnJ+ScgSL0HUkuJgEPY00H11KNCW+lcLcgPk9v0+CSIQAjog79wvTGkKwfV803jdu3mwjSSrm7HInOh8igdNNuComwMSfk9eE4mCAsLKFXj1OAF7UAYazZuNMVtnXG9fZ1WfkXb6uFCC+PcxdnSF6obF0ba0HIgq2U10/bPiQpVA69fbQNemSROnRPXyEduuel6fN8Ktol7xJKbcM+HsbadRe8h86oOd1sFpvN8DCe57tGKKrvr1YhR06uOrz0PLt36Bdc2v422/GTMLy1aPqdWGcA/mz29Dtj3lbKj4dCLdP/8F982yW8FJC7273u903O4avKy5qL0G6tR9fK0+5642uoTLJQzjB/joKwtieDhatx514OQndpsqR9Sw3nCgppL3M3/Mi7nQ/WvTqPfo82Ib/8xduDwuOleOn9++O8s7p+Wkuz3Xno2wPZV2Fm1CEXlzMaTulnfu8qTh7kAC9q8c3DwSf1KVmttDENHNfFJ72/ey/4UrSTzhVtNwW/M8q2XjNaacs4+fgq3yzNC51ajLySfq9QHa6N7ZVOXlvLK93B7FEZTsg0Qte0Ai2ReE1+sTz+V1SG+XkPqZWYQog4kj3IHMjl/zJN7pp6eUsK4RfAqFbFxDYcT3bsoucQWCdGTKHftI0rNaF/mNcQcZT82nZz1Jn9/ExWWwV9y/B5HxqEHJK/YyF/aaxr/yWGWdO0KFZL3U4VhMU3x6LqyEudkx9ueq2oXzs2U/Iih8HiSgnCVbZSRIISOXgknpvHEscN5U+YPlK9NackRGTskh/3l+jYsSye3vtvmHpF1PGNKkIHkCt3Jo0lirj2eFgw14vWVEp5t6CKsA3wvkyk9/mh+Iw8oBonlRyoeqKK0NCC8iXlVbdVn1lLg5/xCK5MfaoiRHRDaXYSlnWiZcgzmOGcz9TNVEGoH6+lkJTueCv+TUaUAy7NCVVJlhWEdX1PX1KSsa/sYiuplZoTKuwoFaF5hhlPU6cekas8MytPmeaW1K9iqFEQQu6K6f52IvpV7t7Ibco8m90/hfmtIAQMpfm8LnLwusEFraEUjj0FofG0lEdW8qIO5YyiKUV4Y5KQA17lfVkisDsuRP9XLKGShA3Ag+5JtOKmvNhRmT26muchdAAPyqHEQSe9AygpmiW3p5KEmIvF7km+Rp1DbEXVVVFJQszFYhkS4+xBWv16q+4fyHZr0m5LEmLeZbo8jpmcTYhz7TwaKUoG/CcJUZFb6fqWl03mHuGrZEtQQcgBF4lma+BIpQh8NJhonI4tV2KCsAHwQmVKdXDE1AkVUeKGkwQh6WRhyXYV58gmKpS48CtBCLhHJVUWe1/ILdRDRCRyv2oibwclCCGXwaZqWpO2THnNHmAj4mTjWybkOgewtbUOAleiiC7iOoWoxndmC/0MVhqSLDXx0xAeVfXTir9CmbBHGccV31kQXfBMEDgmLaxlQspuuJenCWeMD0q12D7eDyRC0vm+KcemFjjBd1eWbJtGCb3H9yjDYSWr2NEO+cqpVVodio6/IgyolLcyBlTPsmKubxYB9K8YoRtppB3FNt2zltFKjNWh26UMiZ3Eq3CFj3wPNYour6N1aPdJY36jDmnvFYthlOpxpwRhML6ae9UzFU/fibgmItejIq10QRy0Hb/HCXGrUKr2roqwRR16H/fW6uUF0dU0ScjFHjNtJca3o2jXMDvFWEraanxNeeMmTuvwsnoJwga1e8Zb/XajojSemG8hSoS6qSq1RTYzqNXhMqFDPc5YGT9R6JodPCQ0jZvTFvXzrkECISGlA+ohuuaWDgnph9KytZQIyfdjSldofoeEtBOw0GzZjgkRl5Sl8MbWkJB+P+ZHWgBD/cAqXTaZL4SAq7buSb64kXglY4XBmKwkk6Z0Qhb6hS6EkIt8s1U+4ThK6NAfyi6fsOtECFvUu4aPIGRio4tfCE/0RtsDCMeROizBpHkA4Y9zIyzBpHkAoe9WuBBu6Z/2CEIR2h4Q2nP6FdsjCEXG0IAQEhZ8R48gFFverMBdFMX0EMK/Sx2S+p9D/UhBddsyHrqvB4QfpSQp6ezfItojTgTcV9sndHSuaXgyNX3CZXl5ZkrXt7DaSANMHq1Zi0HD5iqoKStj8ftIjVmtTbyD8GDtWTkHSB4pp/Dlvc+i//c4IwSKka+w6B00L7300ksvvfTSS+T6D6hIsdlukpamAAAAAElFTkSuQmCC">
             </p>
-            <h4><i ng-if="epamer.status" class="fa" title="{{epamer.status}}" ng-class="vm.statusClass(epamer)"></i>
+            <h4><i ng-if="epamer.status < 3" class="fa" ng-class="vm.statusClass(epamer)"></i>
               <span ng-bind="epamer.firstName + ' ' + epamer.lastName"></span>
             </h4>
 
