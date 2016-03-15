@@ -6,7 +6,6 @@
 
   /** @ngInject */
   function CommonController($state, $scope) {
-    console.log(this);
     var vm = this;
     vm.activeLink = activeLink();
     vm.home = goToHomePage;
